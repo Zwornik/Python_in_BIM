@@ -1,5 +1,5 @@
-#Week 1 – Python Exercises
-#Marathon Times - converts start and end of run time in strings, converts them to integers,
+# Week 7 – Python Exercises
+# Marathon Times - converts start and end of run time in strings, converts them to integers,
 # calculates time of a run and print it back in HH:MM:SS format.
 
 startTime = '10:45:45'
