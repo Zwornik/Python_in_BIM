@@ -2,10 +2,8 @@ coinTypes = ('1p', '2p', '5p', '10p', '20p', '50p', '1gbp', '2gbp')
 menu = ('0', '1', '2', '3', '4', '5')
 snacksNames = {'1':'CHOCOLATE BAR', '2':'SESAME BAR', '3':'MILK BAR', '4': 'PURE GLUTEN BAR', '5':'NO GLUTEN BAR'}
 nominations = {1:20 , 2:10, 5:6, 10:4, 20:2, 50:1, 100:1, 200:1 } # machine coins container
-aaa = nominations.copy()
 startMoneyIn = 0    # Money in machine at the start of the day
 moneyIn = 0         # Money in machine when checked
-#global coins
 coins = 0   # sum of user coins
 spent = 0   # money spent by user
 moneyReturn = 0 # amount to be returned to user
@@ -135,8 +133,6 @@ while True:
         for i in nominations:
             moneyIn = moneyIn + nominations[i] * i
         print(f'I sold for £{moneyIn-startMoneyIn} today')
-        #print(aaa, startMoneyIn)
-        #print(nominations, moneyIn)
         menuMessage()
     else:                                                       # wrong user input
         print('Invalid choice, try again.')
