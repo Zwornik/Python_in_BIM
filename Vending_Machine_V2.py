@@ -132,7 +132,7 @@ while True:
         moneyIn = 0
         for i in nominations:
             moneyIn = moneyIn + nominations[i] * i
-        print(f'I sold for £{moneyIn-startMoneyIn} today')
+        print(f'I sold for £{(moneyIn-startMoneyIn)/100} today')
         menuMessage()
     else:                                                       # wrong user input
         print('Invalid choice, try again.')
