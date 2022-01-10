@@ -1,9 +1,12 @@
 # Week 2 – Project 1 from the book.
-# VENDING MACHINE
+# VENDING MACHINE - this is very clever vending machine. If it does not contain coins for change you will be left
+# with no change and your lost money will add to machine profit :)
+
 coinTypes = ('1p', '2p', '5p', '10p', '20p', '50p', '1gbp', '2gbp')
 menu = ('0', '1', '2', '3', '4', '5')
-snacksIn = {'CHOCOLATE BAR': 5, 'SESAME BAR': 5, 'MILK BAR': 5, 'PURE GLUTEN BAR': 5,
-            'NO GLUTEN BAR': 5}  # Snacks in the machine
+startSnacksIn = {'CHOCOLATE BAR': 5, 'SESAME BAR': 5, 'MILK BAR': 5, 'PURE GLUTEN BAR': 5,
+            'NO GLUTEN BAR': 5}  # Snacks in the machine at the beginning of the day
+snacksIn = startSnacksIn.copy()
 snacksNames = {'1':'CHOCOLATE BAR', '2':'SESAME BAR', '3':'MILK BAR', '4': 'PURE GLUTEN BAR', '5':'NO GLUTEN BAR'}
 nominations = {1: 20, 2: 10, 5: 6, 10: 4, 20: 2, 50: 1, 100: 1, 200: 1}  # machine coins container
 startMoneyIn = 0  # Money in machine at the start of the day
@@ -14,8 +17,9 @@ moneyReturn = 0  # amount to be returned to user
 
 # INTRODUCTION MESSAGE
 def menuMessage():
-    global coins, spent, basket
+    global coins, spent, basket, flag
     coins = spent = 0
+    flag = True # prevents from sales summary display during of transaction.
     basket = {'CHOCOLATE BAR': 0, 'SESAME BAR': 0, 'MILK BAR': 0, 'PURE GLUTEN BAR': 0,
               'NO GLUTEN BAR': 0}  # user shopping basket
 
@@ -35,27 +39,28 @@ def menuMessage():
 
 
 # CHANGE RETURN MODULE
-def coinReturn(coins):
-    toReturn = coins
-    if toReturn:
-        print('Here you have £{:.2f} change in following coins:'.format(toReturn / 100))
+def coinReturn(aaa):
+    global coins
+    coins = aaa
+    if coins:
+        print('Here you have £{:.2f} change in following coins:'.format(coins / 100))
     noCoins = []   # list of unavailable coins
     for i in reversed(nominations):  # "i" is a coin nominal
-        if toReturn == i:  # return change of a single coin
+        if coins == i:  # return change of a single coin
             quotient = 1
-            toReturn = toReturn - i  # reduce balance to return
+            coins = coins - i  # reduce balance to return
             if i in (100, 200):  # printing no. of coins to return, plural/singular text formatting
                 print('   {q} coins of £{m}'.format(q=quotient, m=int(i / 100)))
             else:
                 print('   {q} coins of {m}p'.format(q=quotient, m=i))
             nominations[i] -= 1  # subtracts coin from coins container
-        elif toReturn > i:  # return change of more than a single coins
-            quotient = toReturn // i
+        elif coins > i:  # return change of more than a single coins
+            quotient = coins // i
             while quotient > nominations[i]:  # check if coins are available
                 quotient -= 1
                 if i not in noCoins:
                     noCoins.append(i)  # adds unavailable coin to list of unavailable coins
-            toReturn = toReturn - i * quotient  # reduces money to return by number of available nominal
+            coins = coins - i * quotient  # reduces money to return by number of available nominal
             if nominations[i] > 0:  # printing no. of coins to return
                 if i in (100, 200):  # plural/singular text formatting
                     print('   {q} coins of £{m}'.format(q=quotient, m=int(i / 100)))
@@ -74,12 +79,12 @@ def coinReturn(coins):
         print('are unavailable so I gave you change in lower nominations.')
 
     # MESSAGE ABOUT NO MONEY FOR RETURN AVAILABLE
-    if toReturn > 0:
+    if coins > 0:
         print(f'Upsss! \n'
-              f'I contain no more change so I am not able to give you remaining £{toReturn} change.\n'
+              f'I contain no more change so I am not able to give you remaining £{coins} change.\n'
               f'Please write to Prime Minister to get your money back.\n'
               f'SORRY :-(')
-    return toReturn
+    print(coins)
 
 
 for i in nominations:  # money in the machine at the start of the day
@@ -92,6 +97,7 @@ while True:
     print('You have £{:.2f}'.format(coins / 100))
     userIn = input()  # user input
     if userIn.lower() in coinTypes:  # user adds a coin
+        flag = False
         coin = userIn.lower()  # makes user input case insensitive
         if coin == '1gbp':
             coin = '100'
@@ -102,13 +108,15 @@ while True:
         nominations[coin] += 1  # adds coin to machine container
         coins += coin   # adds coin to user's coins
         if coins >= 10:
-            print('Type 1 to 5 to select a snack, or type 0 to confirm, or insert more coins')
+            print('Select a snack (1-5), confirm (0) or insert more coins')
         else:
             print('Add more coins.')
     elif userIn in ('1', '2', '3', '4', '5') and coins >= 10:  # user selected a snack
+        flag = False
         snackName = snacksNames[userIn] # Selected snack name
         if snacksIn[snackName] < 1: # checking if selected snack available
-            print(f'No more {snackName}S available. Please select other snack (1-5), confirm (0) or add a coin')
+            print(f'No more {snackName}S available. \n'
+                  f'Please select other snack (1-5), confirm (0) or add a coin')
         else:   # if snack is available
             coins -= 10  # reducing user's money
             basket[snackName] += 1  # adding snack to user's basket
@@ -122,13 +130,14 @@ while True:
                         print(message.format(basket[i], i))
                     else:  # confirmation of snack selection (singular)
                         print(basket[i], i)
-            print('\nType "0" to confirm your selection, or insert a coin or')
+            print('\nConfirm selection (0) or insert a coin or')
             if coins >= 10:
-                print('type 1 to 5 to select another snack.')
+                print('Select another snack (1-5).')
     elif userIn in ('1', '2', '3', '4', '5') and coins < 10:  # user selects snack with no funds
         print('Insufficient founds for a snack.\n'
               'Please insert a coin.')
     elif userIn == '0':  # user confirms snack selection
+        flag = False
         if spent == 0:
             print('You have not selected anything')
             coinReturn(coins)
@@ -144,11 +153,15 @@ while True:
             print('HAVE A GOOD MEAL!\n')
             coinReturn(coins) # go to change return module
             menuMessage()
-    elif userIn == '6':  # user displays sales summary
+    elif userIn == '6' and flag:  # user displays sales summary
         moneyIn = 0  # Money in machine when checked
-        for i in nominations:  # calculating money in the machine now
+        print('I sold today:')
+        for i in snacksIn:  # printing sold snacks
+            if startSnacksIn[i] - snacksIn[i] > 0:
+                print('{} {}S'.format(startSnacksIn[i] - snacksIn[i], i))
+        for i in nominations:  # calculating money in the machine now from coins in container
             moneyIn += nominations[i] * i
-        print(f'I sold for £{(moneyIn - startMoneyIn) / 100} today')
+        print(f'for £{(moneyIn - startMoneyIn) / 100}')
         menuMessage()
     else:  # wrong user input
         print('Invalid choice, try again.')
