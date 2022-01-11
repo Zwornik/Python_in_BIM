@@ -26,7 +26,7 @@ def menuMessage():
     print('\n Welcome new customer! I am perfect Vending Machine. How can I help? \n\n'
           'MENU:\n'
           'Type one of the following to insert a coin: 1p, 2p, 5p, 10p, 20p, 50p, 1GBP or 2GBP\n'
-          'or type one of below to select an option:\n'
+          'or type 1-6 to select an below option:\n'
           '1 - Chocolate bar     - 10p\n'
           '2 - Sesame bar        - 10p\n'
           '3 - Milk bar          - 10p\n'
