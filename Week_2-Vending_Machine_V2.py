@@ -1,12 +1,11 @@
 # Week 2 – Project 1 from the book.
-# VENDING MACHINE - this is very clever vending machine. If it does not contain coins for change you will be left
-# with no change and your lost money will add to machine profit :)
+# VENDING MACHINE - this is very clever and profitable vending machine. If it does not contain coins for
+# change you will be left with no change and your lost money will add to machine profit :)
 
 coinTypes = ('1p', '2p', '5p', '10p', '20p', '50p', '1gbp', '2gbp')
 menu = ('0', '1', '2', '3', '4', '5')
 startSnacksIn = {'CHOCOLATE BAR': 5, 'SESAME BAR': 5, 'MILK BAR': 5, 'PURE GLUTEN BAR': 5,
             'NO GLUTEN BAR': 5}  # Snacks in the machine at the beginning of the day
-snacksIn = startSnacksIn.copy()
 snacksNames = {'1':'CHOCOLATE BAR', '2':'SESAME BAR', '3':'MILK BAR', '4': 'PURE GLUTEN BAR', '5':'NO GLUTEN BAR'}
 nominations = {1: 20, 2: 10, 5: 6, 10: 4, 20: 2, 50: 1, 100: 1, 200: 1}  # machine coins container
 startMoneyIn = 0  # Money in machine at the start of the day
@@ -19,11 +18,11 @@ moneyReturn = 0  # amount to be returned to user
 def menuMessage():
     global coins, spent, basket, flag
     coins = spent = 0
-    flag = True # prevents from sales summary display during of transaction.
+    flag = True # prevents from sales summary display during transaction.
     basket = {'CHOCOLATE BAR': 0, 'SESAME BAR': 0, 'MILK BAR': 0, 'PURE GLUTEN BAR': 0,
               'NO GLUTEN BAR': 0}  # user shopping basket
 
-    input('\n\nPress enter')
+    input('\n\nPress enter to start using machine')
     print('\n Welcome new customer! I am perfect Vending Machine. How can I help? \n\n'
           'MENU:\n'
           'Type one of the following to insert a coin: 1p, 2p, 5p, 10p, 20p, 50p, 1GBP or 2GBP\n'
@@ -36,7 +35,6 @@ def menuMessage():
           '6 - Display sales summary\n'
           '0 - Confirm your choice\n\n'
           'Please insert a coin.')
-
 
 # CHANGE RETURN MODULE
 def coinReturn(aaa):
@@ -84,12 +82,26 @@ def coinReturn(aaa):
               f'I contain no more change so I am not able to give you remaining £{coins} change.\n'
               f'Please write to Prime Minister to get your money back.\n'
               f'SORRY :-(')
-    print(coins)
 
+# LOADING SUPPLIES TO THE MACHINE
+iniInput = input('\nPlease load snacks (1) or skip (0). \n'
+      '5 items of each snack will be automatically loaded if you skip loading procedure\n')
+if iniInput == '1':
+    for i in startSnacksIn:
+        while True:
+            iniInput = input(f'How many {i}S are you adding?')
+            if iniInput.isdigit():  # Verifying if user typed integer
+                startSnacksIn[i] = int(iniInput)  # Loading snacks to machine
+                break
+            else:
+                print('Wrong input. Please type integer number.')
+    print(f'You have loaded: {startSnacksIn}')
+snacksIn = startSnacksIn.copy()  # Copy initial supplies to current supply
 
+# INITIAL PART
 for i in nominations:  # money in the machine at the start of the day
     startMoneyIn = startMoneyIn + i * nominations[i]
-print('start money =', startMoneyIn)
+print('I contain £{:.2f} of change.'.format(startMoneyIn/100))
 menuMessage()
 
 # MAIN MENU
