@@ -1,10 +1,8 @@
 # Week 2 – Project 2 from the book.
 # HAZCHEM SIGNS DECODER - This program decodes EAC (Emergency Action Code) and display advise for fire fighters.
-# program is optimised to take minimal amount of memory by reduceing repetition of the same string messages in
 
 fightWith = {'1': 'coarse spray', '2': 'fine spray', '3': 'foam', '4': 'dry agent'}
 safetyPrec = ['P', 'R', 'S', 'T', 'W', 'X', 'Y', 'Z']
-publicHaz = ['E']
 
 while True:
     EAC = input("\nPlease type EAC code: ").upper()
