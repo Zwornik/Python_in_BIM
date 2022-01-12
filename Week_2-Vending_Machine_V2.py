@@ -4,9 +4,9 @@
 
 coinTypes = ('1p', '2p', '5p', '10p', '20p', '50p', '1gbp', '2gbp')
 menu = ('0', '1', '2', '3', '4', '5')
-startSnacksIn = {'CHOCOLATE BAR': 5, 'SESAME BAR': 5, 'MILK BAR': 5, 'PURE GLUTEN BAR': 5,
-            'NO GLUTEN BAR': 5}  # Snacks in the machine at the beginning of the day
-snacksNames = {'1':'CHOCOLATE BAR', '2':'SESAME BAR', '3':'MILK BAR', '4': 'PURE GLUTEN BAR', '5':'NO GLUTEN BAR'}
+startSnacksIn = {'CHOCOLATE': 5, 'MUESLI BAR': 5, 'APPLE': 5, 'POPCORN': 5,
+            'CHEESE PUFFS': 5}  # Snacks in the machine at the beginning of the day
+snacksNames = {'1':'CHOCOLATE', '2':'MUESLI BAR', '3':'APPLE', '4': 'POPCORN', '5':'CHEESE PUFFS'}
 nominations = {1: 20, 2: 10, 5: 6, 10: 4, 20: 2, 50: 1, 100: 1, 200: 1}  # machine coins container
 startMoneyIn = 0  # Money in machine at the start of the day
 coins = 0  # sum of user's coins
@@ -19,9 +19,7 @@ def menuMessage():
     global coins, spent, basket, flag
     coins = spent = 0
     flag = True # prevents from sales summary display during transaction.
-    basket = {'CHOCOLATE BAR': 0, 'SESAME BAR': 0, 'MILK BAR': 0, 'PURE GLUTEN BAR': 0,
-              'NO GLUTEN BAR': 0}  # user shopping basket
-
+    basket = dict.fromkeys(startSnacksIn, 0)  # initiate empty user's shopping basket
     input('\n\nPress enter to start using machine')
     print('\n Welcome new customer! I am perfect Vending Machine. How can I help? \n\n'
           'MENU:\n'
@@ -128,7 +126,7 @@ while True:
         snackName = snacksNames[userIn] # Selected snack name
         if snacksIn[snackName] < 1: # checking if selected snack available
             print(f'No more {snackName}S available. \n'
-                  f'Please select other snack (1-5), confirm (0) or add a coin')
+                  f'Please select another snack (1-5), confirm (0) or add a coin')
         else:   # if snack is available
             coins -= 10  # reducing user's money
             basket[snackName] += 1  # adding snack to user's basket
