@@ -38,22 +38,29 @@ while True:
             #break
         #else:
             #flag = i
-    flag = flag2 = 0
-    n = 0
+    flag = flag2 = flag3= 2000
     print(arabList)
-    for i in arabList:  # checks if consequential numbers are smaller than predecessor
-        print('EEE', flag2, flag, i, n)
-        if i > flag and flag in (1,10,100,1000) and flag/i in (0.2, 0.1) and \
-                (flag2 == 0 or flag2 >= flag * 10) and flag2 > i:
-            arabList.pop(n-1)
-            arabList.pop(n-1)
-            arabList.insert(n-1, i-flag)
-            n += 1
-            print('---', flag2, flag, i, n)
+    n = 0
+    while True:  # checks if consequential numbers are smaller than predecessor
+        i = arabList[n]
+        print('EEE', flag3, flag2, flag, i, n)
+        if flag > flag2 and flag2 in (1, 10, 100, 1000) and flag2 / flag in (0.2, 0.1) \
+                and (flag3 == 0 or flag3 >= flag2 * 10) and flag2 > i :
+            arabList.pop(n - 2)
+            arabList.pop(n - 2)
+            arabList.insert(n - 2, flag - flag2)
+            print('---', flag3, flag2, flag, i, n)
+            print('list', arabList)
         else:
-            flag2 = flag
-            flag = i
             n += 1
+            print('list2', arabList)
+        flag3 = flag2
+        flag2 = flag
+        flag = i
+        if n == len(arabList):
+            print('Errrrrrrrrrrrr')
+            break
+
     #for i in romanNo:
 
     print('OK', arabList)
