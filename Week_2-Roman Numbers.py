@@ -29,4 +29,5 @@ while True:
             flag3 = flag2
             flag2 = flag
             flag = i
+
     print('OK', arabList)
