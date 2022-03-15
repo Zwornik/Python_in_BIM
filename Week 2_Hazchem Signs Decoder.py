@@ -25,3 +25,4 @@ while True:
             print('-' * 38)
     else:
         print('\n', EAC, 'is not valid EAC code. Please type again.')
+
