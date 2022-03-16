@@ -1,4 +1,4 @@
-# Week 2 – Project 1 from the book.
+# Week 2 – Project 1 from the book in Python 3.9
 # VENDING MACHINE - this is very clever and profitable vending machine. If it does not contain coins for
 # change you will be left with no change and your lost money will add to machine profit :)
 
@@ -14,13 +14,15 @@ spent = 0  # money spent by user
 moneyReturn = 0  # amount to be returned to user
 
 
-# INTRODUCTION MESSAGE
+
 def menuMessage():
+    """display INTRODUCTION MESSAGE"""
+
     global coins, spent, basket, flag
     coins = spent = 0
     flag = True # prevents from sales summary display during transaction.
     basket = dict.fromkeys(startSnacksIn, 0)  # initiate empty user's shopping basket
-    input('\n\nPress enter to start using machine')
+    input('\n\nPress enter to start using machine\n__________________________________\n')
     print('\n Welcome new customer! I am perfect Vending Machine. How can I help? \n\n'
           'MENU:\n'
           'Type one of the following to insert a coin: 1p, 2p, 5p, 10p, 20p, 50p, 1GBP or 2GBP\n'
@@ -34,29 +36,33 @@ def menuMessage():
           '0 - Confirm your choice\n\n'
           'Please insert a coin.')
 
-# CHANGE RETURN MODULE
+
 def coinReturn(aaa):
+    """CHANGE RETURN MODULE"""
+
     global coins
-    coins = aaa
-    if coins:
-        print('Here you have £{:.2f} change in following coins:'.format(coins / 100))
-    noCoins = []   # list of unavailable coins
+    change = aaa
+    noCoins = []  # list of unavailable coins
+
+    if change:
+        print('Here you have £{:.2f} change in following coins:'.format(change / 100))
+
     for i in reversed(nominations):  # "i" is a coin nominal
-        if coins == i:  # return change of a single coin
+        if change == i:  # return change of a single coin
             quotient = 1
-            coins = coins - i  # reduce balance to return
+            change -= i  # reduce balance to return
             if i in (100, 200):  # printing no. of coins to return, plural/singular text formatting
                 print('   {q} coins of £{m}'.format(q=quotient, m=int(i / 100)))
             else:
                 print('   {q} coins of {m}p'.format(q=quotient, m=i))
             nominations[i] -= 1  # subtracts coin from coins container
-        elif coins > i:  # return change of more than a single coins
-            quotient = coins // i
+        elif change > i:  # return change of more than a single coins
+            quotient = change // i
             while quotient > nominations[i]:  # check if coins are available
                 quotient -= 1
                 if i not in noCoins:
                     noCoins.append(i)  # adds unavailable coin to list of unavailable coins
-            coins = coins - i * quotient  # reduces money to return by number of available nominal
+            change -= i * quotient  # reduces money to return by number of available nominal
             if nominations[i] > 0:  # printing no. of coins to return
                 if i in (100, 200):  # plural/singular text formatting
                     print('   {q} coins of £{m}'.format(q=quotient, m=int(i / 100)))
@@ -75,14 +81,14 @@ def coinReturn(aaa):
         print('are unavailable so I gave you change in lower nominations.')
 
     # MESSAGE ABOUT NO MONEY FOR RETURN AVAILABLE
-    if coins > 0:
+    if change > 0:
         print(f'Upsss! \n'
               f'I contain no more change so I am not able to give you remaining £{coins} change.\n'
               f'Please write to Prime Minister to get your money back.\n'
               f'SORRY :-(')
 
 # LOADING SUPPLIES TO THE MACHINE
-iniInput = input('\nPlease load snacks (1) or skip (0). \n'
+iniInput = input('\nPlease load snacks (press 1) or skip (press Enter). \n'
       '5 items of each snack will be automatically loaded if you skip loading procedure\n')
 if iniInput == '1':
     for i in startSnacksIn:
@@ -105,7 +111,8 @@ menuMessage()
 # MAIN MENU
 while True:
     print('You have £{:.2f}'.format(coins / 100))
-    userIn = input()  # user input
+    userIn = input('---->')  # user input
+    #print('-' * 14)
     if userIn.lower() in coinTypes:  # user adds a coin
         flag = False
         coin = userIn.lower()  # makes user input case insensitive
@@ -140,7 +147,7 @@ while True:
                         print(message.format(basket[i], i))
                     else:  # confirmation of snack selection (singular)
                         print(basket[i], i)
-            print('\nConfirm selection (0) or insert a coin or')
+            print('\nConfirm selection (0) or insert a coin.')
             if coins >= 10:
                 print('Select another snack (1-5).')
     elif userIn in ('1', '2', '3', '4', '5') and coins < 10:  # user selects snack with no funds
