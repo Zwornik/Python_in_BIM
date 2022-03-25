@@ -13,7 +13,7 @@ coins = 0  # sum of user's coins
 spent = 0  # money spent by user
 moneyReturn = 0  # amount to be returned to user
 
-
+#!python --version
 
 def menuMessage():
     """display INTRODUCTION MESSAGE"""
@@ -38,7 +38,7 @@ def menuMessage():
 
 
 def coinReturn(aaa):
-    """CHANGE RETURN MODULE"""
+    ###CHANGE RETURN MODULE###
 
     global coins
     change = aaa
@@ -47,28 +47,34 @@ def coinReturn(aaa):
     if change:
         print('Here you have £{:.2f} change in following coins:'.format(change / 100))
 
-    for i in reversed(nominations):  # "i" is a coin nominal
-        if change == i:  # return change of a single coin
-            quotient = 1
-            change -= i  # reduce balance to return
-            if i in (100, 200):  # printing no. of coins to return, plural/singular text formatting
-                print('   {q} coins of £{m}'.format(q=quotient, m=int(i / 100)))
-            else:
-                print('   {q} coins of {m}p'.format(q=quotient, m=i))
-            nominations[i] -= 1  # subtracts coin from coins container
-        elif change > i:  # return change of more than a single coins
-            quotient = change // i
-            while quotient > nominations[i]:  # check if coins are available
-                quotient -= 1
-                if i not in noCoins:
-                    noCoins.append(i)  # adds unavailable coin to list of unavailable coins
-            change -= i * quotient  # reduces money to return by number of available nominal
-            if nominations[i] > 0:  # printing no. of coins to return
-                if i in (100, 200):  # plural/singular text formatting
+    try:
+        for i in reversed(nominations):  # "i" is a coin nominal
+            if change == i:  # return change of a single coin
+                quotient = 1
+                change -= i  # reduce balance to return
+                if i in (100, 200):  # printing no. of coins to return, plural/singular text formatting
                     print('   {q} coins of £{m}'.format(q=quotient, m=int(i / 100)))
                 else:
                     print('   {q} coins of {m}p'.format(q=quotient, m=i))
-            nominations[i] -= quotient  # subtracts coins from coins container
+                nominations[i] -= 1  # subtracts coin from coins container
+            elif change > i:  # return change of more than a single coins
+                quotient = change // i
+                while quotient > nominations[i]:  # check if coins are available
+                    quotient -= 1
+                    if i not in noCoins:
+                        noCoins.append(i)  # adds unavailable coin to list of unavailable coins
+                change -= i * quotient  # reduces money to return by number of available nominal
+                if nominations[i] > 0:  # printing no. of coins to return
+                    if i in (100, 200):  # plural/singular text formatting
+                        print('   {q} coins of £{m}'.format(q=quotient, m=int(i / 100)))
+                    else:
+                        print('   {q} coins of {m}p'.format(q=quotient, m=i))
+                nominations[i] -= quotient  # subtracts coins from coins container
+    except TypeError as error_message:
+        print(error_message)
+        print("8"*40,"\nTHE COLAB DOES NOT SUPPORT ORDERED DICTIONARIES.\n"
+              "PLEASE COPY THIS CODE TO ANOTHER PLATFORM WITH PYTHON 3.9 INSTEAD\n"
+        "8"*40,"\n")
 
     # MESSAGE ABOUT UNAVAILABLE COINS
     if bool(noCoins):
